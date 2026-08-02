@@ -56,4 +56,3 @@ Ejecuta `install-pi-agent.bat` desde esta carpeta. El script:
 ## Participantes
 
 Sebastián García Galán, Francisco Javier Maldonado Carrascosa, José Enrique Muñoz Expósito — Departamento de Ingeniería de Telecomunicación, Universidad de Jaén.
-"# agent" 
