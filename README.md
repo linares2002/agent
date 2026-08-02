@@ -6,7 +6,7 @@ Asistente de IA generativa (basado en [pi-coding-agent](https://pi.dev)) que act
 
 ## Contexto académico
 
-En las asignaturas *Redes basadas en IP* del Máster en Ingeniería de Telecomunicación y *Sistemas de Telfonía* del Grado en Ingeniería Telemática, una de las principales dificultades didácticas es la distancia entre la teoría por capas y la lectura de una captura de tráfico real, densa y poco intuitiva para el alumnado. Este proyecto incorpora a las prácticas un agente de IA con capacidades reales de análisis de red (vía MCP + Wireshark/tshark) guiado por una metodología pedagógica propia:
+En las asignaturas *Redes basadas en IP* del Máster en Ingeniería de Telecomunicación y *Sistemas de Telefonía* del Grado en Ingeniería Telemática, una de las principales dificultades didácticas es la distancia entre la teoría por capas y la lectura de una captura de tráfico real, densa y poco intuitiva para el alumnado. Este proyecto incorpora a las prácticas un agente de IA con capacidades reales de análisis de red (vía MCP + Wireshark/tshark) guiado por una metodología pedagógica propia:
 
 - Parte siempre de un resumen general antes de entrar en el detalle de paquete.
 - Relaciona cada cabecera con su capa correspondiente.
