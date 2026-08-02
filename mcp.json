@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "wireshark": {
+      "command": "C:\\Users\\mange\\Desktop\\agent\\wireshark-mcp\\.venv\\Scripts\\python.exe",
+      "args": ["-u", "-m", "wireshark_mcp.server", "serve"],
+      "env": {
+        "PATH": "C:\\Program Files\\Wireshark;C:\\Windows\\System32;C:\\Windows"
+      },
+      "directTools": true
+    }
+  }
+}

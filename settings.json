@@ -1,0 +1,11 @@
+{
+  "packages": [
+    "npm:pi-mcp-adapter"
+  ],
+  "lastChangelogVersion": "0.83.0",
+  "defaultProvider": "openrouter",
+  "defaultModel": "google/gemini-2.5-flash",
+  "defaultThinkingLevel": "low",
+  "enableSkillCommands": true,
+  "theme": "dark"
+}
