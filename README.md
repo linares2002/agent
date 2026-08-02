@@ -50,7 +50,7 @@ Ejecuta `install-pi-agent.bat` desde esta carpeta. El script:
 
 ## Skills incluidas
 
-- **wireshark-analysis** — Modo profesor para Redes basadas en IP: captura y analiza tráfico real (ARP, DHCP, DNS, TCP, HTTP, TLS...) con fines exclusivamente didácticos.
+- **wireshark-analysis** — Modo profesor: captura y analiza tráfico real (SIP, RIP, OSPF, ARP, DHCP, DNS, TCP, HTTP, TLS...) con fines exclusivamente didácticos.
 
 
 ## Participantes
