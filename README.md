@@ -54,7 +54,7 @@ El agente conversa con el alumnado y con el proveedor de IA para razonar, mientr
 
 ```
 agent/
-├── install-pi-agent.bat        # Instala pi-coding-agent y despliega toda la configuración
+├── install-pi-agent.bat         # Instala pi-coding-agent y despliega toda la configuración
 ├── settings.json                # Configuración base del agente (proveedor, modelo, etc.)
 ├── mcp.json                     # Definición del servidor MCP de Wireshark
 ├── auth.json                    # Credenciales del proveedor de IA
