@@ -1,12 +1,12 @@
 # Tutor de IA para el análisis guiado de tráfico de red
 
-Asistente de IA generativa (basado en [pi-coding-agent](https://pi.dev)) que actúa como tutor de apoyo en sesiones prácticas de **Redes basadas en IP** y **Servicios de Telefonía**, capaz de inspeccionar y explicar tráfico de red real —en vivo o desde capturas `.pcap`— conectando siempre lo observado con el concepto teórico correspondiente (modelo OSI/TCP-IP, encapsulado, direccionamiento, control de flujo...).
+Asistente de IA generativa (basado en [pi-coding-agent](https://pi.dev)) que actúa como tutor de apoyo en sesiones prácticas de **Redes basadas en IP** y **Sistemas de Telefonía**, capaz de inspeccionar y explicar tráfico de red real —en vivo o desde capturas `.pcap`— conectando siempre lo observado con el concepto teórico correspondiente (modelo OSI/TCP-IP, encapsulado, direccionamiento, control de flujo...).
 
 > Proyecto desarrollado en el marco de la **II Edición de Proyectos Innovadores con IA (Programa GenIA)** — Convocatoria 2026, Universidad de Jaén.
 
 ## Contexto académico
 
-En las asignaturas *Redes basadas en IP* del Máster en Ingeniería de Telecomunicación y *Servicios de Telfonía* del Grado en Ingeniería Telemática, una de las principales dificultades didácticas es la distancia entre la teoría por capas y la lectura de una captura de tráfico real, densa y poco intuitiva para el alumnado. Este proyecto incorpora a las prácticas un agente de IA con capacidades reales de análisis de red (vía MCP + Wireshark/tshark) guiado por una metodología pedagógica propia:
+En las asignaturas *Redes basadas en IP* del Máster en Ingeniería de Telecomunicación y *Sistemas de Telfonía* del Grado en Ingeniería Telemática, una de las principales dificultades didácticas es la distancia entre la teoría por capas y la lectura de una captura de tráfico real, densa y poco intuitiva para el alumnado. Este proyecto incorpora a las prácticas un agente de IA con capacidades reales de análisis de red (vía MCP + Wireshark/tshark) guiado por una metodología pedagógica propia:
 
 - Parte siempre de un resumen general antes de entrar en el detalle de paquete.
 - Relaciona cada cabecera con su capa correspondiente.
