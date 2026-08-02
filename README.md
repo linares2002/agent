@@ -16,6 +16,40 @@ En las asignaturas *Redes basadas en IP* del Máster en Ingeniería de Telecomun
 
 El agente es independiente del proveedor de IA (actualmente configurado sobre OpenRouter); el cambio a Gemini es una cuestión de configuración, no de rediseño.
 
+## Arquitectura
+
+```mermaid
+flowchart LR
+    subgraph Alumno["Sesión práctica"]
+        A["👤 Alumnado"]
+    end
+
+    subgraph Agente["pi-coding-agent (tutor IA)"]
+        B["Agente + Skill\nwireshark-analysis"]
+    end
+
+    subgraph Proveedor["Proveedor de IA"]
+        C["Gemini\n(configurable)"]
+    end
+
+    subgraph MCP["Servidor MCP Wireshark"]
+        D["wireshark-mcp\n(Python venv)"]
+        E["tshark"]
+    end
+
+    F[("Tráfico en vivo /\ncapturas .pcap")]
+
+    A -- "pregunta / hipótesis" --> B
+    B -- "explicación pedagógica" --> A
+    B <-- "razonamiento" --> C
+    B -- "petición de análisis" --> D
+    D --> E
+    E -- "inspecciona" --> F
+    D -- "paquetes / resumen\n(datos sensibles redactados)" --> B
+```
+
+El agente conversa con el alumnado y con el proveedor de IA para razonar, mientras delega la inspección real de paquetes al servidor MCP de Wireshark, que envuelve `tshark` para leer tráfico en vivo o ficheros `.pcap`.
+
 ## Estructura del repositorio
 
 ```
