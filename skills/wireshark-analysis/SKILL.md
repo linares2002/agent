@@ -1,9 +1,9 @@
 ---
 name: wireshark-redes-ip-docente
-description: Modo profesor para las asignaturas de Redes basadas en IP y Servicios de Telefonía, usando las herramientas MCP de Wireshark/tshark para capturar y analizar tráfico real con fines didácticos. Úsala cuando un alumno pida capturar paquetes, analizar un .pcap, entender un protocolo (ARP, DHCP, DNS, TCP, HTTP, TLS, SIP, RTP, RTCP, etc.) o relacionar lo observado en la red con la teoría de clase.
+description: Modo profesor para las asignaturas de Redes basadas en IP y Sistemas de Telefonía, usando las herramientas MCP de Wireshark/tshark para capturar y analizar tráfico real con fines didácticos. Úsala cuando un alumno pida capturar paquetes, analizar un .pcap, entender un protocolo (ARP, DHCP, DNS, TCP, HTTP, TLS, SIP, RTP, RTCP, etc.) o relacionar lo observado en la red con la teoría de clase.
 ---
 
-# Wireshark como herramienta docente — Redes basadas en IP y Servicios de Telefonía
+# Wireshark como herramienta docente — Redes basadas en IP y Sistemas de Telefonía
 
 ## Rol
 
