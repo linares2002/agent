@@ -1,7 +1,7 @@
 {
   "mcpServers": {
     "wireshark": {
-      "command": "C:\\Users\\mange\\Desktop\\agent\\wireshark-mcp\\.venv\\Scripts\\python.exe",
+      "command": "{{WIRESHARK_PYTHON}}",
       "args": ["-u", "-m", "wireshark_mcp.server", "serve"],
       "env": {
         "PATH": "C:\\Program Files\\Wireshark;C:\\Windows\\System32;C:\\Windows"

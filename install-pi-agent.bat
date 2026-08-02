@@ -58,19 +58,15 @@ echo [5/6] Escribiendo settings.json, auth.json y mcp.json en "%PI_AGENT_DIR%"..
 copy /Y "%SCRIPT_DIR%\settings.json" "%PI_AGENT_DIR%\settings.json" >nul
 copy /Y "%SCRIPT_DIR%\auth.json" "%PI_AGENT_DIR%\auth.json" >nul
 
-> "%PI_AGENT_DIR%\mcp.json" (
-echo {
-echo   "mcpServers": {
-echo     "wireshark": {
-echo       "command": "%SCRIPT_DIR_JSON%\\wireshark-mcp\\.venv\\Scripts\\python.exe",
-echo       "args": ["-u", "-m", "wireshark_mcp.server", "serve"],
-echo       "env": {
-echo         "PATH": "C:\\Program Files\\Wireshark;C:\\Windows\\System32;C:\\Windows"
-echo       },
-echo       "directTools": true
-echo     }
-echo   }
-echo }
+rem mcp.json es una plantilla con el placeholder {{WIRESHARK_PYTHON}}; se
+rem sustituye aqui por la ruta real (dependiente del usuario/ubicacion
+rem actual) antes de escribirlo en el destino, para no dejar hardcodeada
+rem la ruta de quien genero originalmente el archivo.
+set "WIRESHARK_PYTHON_JSON=%SCRIPT_DIR_JSON%\\wireshark-mcp\\.venv\\Scripts\\python.exe"
+powershell -NoProfile -Command "(Get-Content -Raw -LiteralPath '%SCRIPT_DIR%\mcp.json') -replace '\{\{WIRESHARK_PYTHON\}\}', '%WIRESHARK_PYTHON_JSON%' | Set-Content -NoNewline -LiteralPath '%PI_AGENT_DIR%\mcp.json'"
+if errorlevel 1 (
+    echo ERROR: fallo la generacion de mcp.json.
+    exit /b 1
 )
 
 echo.
