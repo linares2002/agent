@@ -1,6 +1,6 @@
 # Tutor de IA para el análisis guiado de tráfico de red
 
-Asistente de IA generativa (basado en [pi-coding-agent](https://www.npmjs.com/package/@earendil-works/pi-coding-agent)) que actúa como tutor de apoyo en sesiones prácticas de **Redes basadas en IP** y **Servicios de Telefonía**, capaz de inspeccionar y explicar tráfico de red real —en vivo o desde capturas `.pcap`— conectando siempre lo observado con el concepto teórico correspondiente (modelo OSI/TCP-IP, encapsulado, direccionamiento, control de flujo...).
+Asistente de IA generativa (basado en [pi-coding-agent](https://pi.dev)) que actúa como tutor de apoyo en sesiones prácticas de **Redes basadas en IP** y **Servicios de Telefonía**, capaz de inspeccionar y explicar tráfico de red real —en vivo o desde capturas `.pcap`— conectando siempre lo observado con el concepto teórico correspondiente (modelo OSI/TCP-IP, encapsulado, direccionamiento, control de flujo...).
 
 > Proyecto desarrollado en el marco de la **II Edición de Proyectos Innovadores con IA (Programa GenIA)** — Convocatoria 2026, Universidad de Jaén.
 
