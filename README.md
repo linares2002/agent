@@ -28,6 +28,10 @@ flowchart LR
         B["Agente + Skill\nwireshark-analysis"]
     end
 
+    subgraph Proxy["LiteLLM (proxy local)"]
+        L["localhost:4000\nAPI OpenAI-compatible"]
+    end
+
     subgraph Proveedor["Proveedor de IA"]
         C["Gemini\n(configurable)"]
     end
@@ -41,14 +45,15 @@ flowchart LR
 
     A -- "pregunta / hipótesis" --> B
     B -- "explicación pedagógica" --> A
-    B <-- "razonamiento" --> C
+    B <-- "razonamiento" --> L
+    L <-- "OpenRouter API" --> C
     B -- "petición de análisis" --> D
     D --> E
     E -- "inspecciona" --> F
     D -- "paquetes / resumen\n(datos sensibles redactados)" --> B
 ```
 
-El agente conversa con el alumnado y con el proveedor de IA para razonar, mientras delega la inspección real de paquetes al servidor MCP de Wireshark, que envuelve `tshark` para leer tráfico en vivo o ficheros `.pcap`.
+El agente conversa con el alumnado y, para razonar, delega las llamadas al modelo en **LiteLLM**, un proxy local (por defecto en `http://localhost:4000`) que expone una API compatible con OpenAI y reenvía las peticiones al proveedor configurado (OpenRouter → Gemini u otro). Esta capa de proxy permite cambiar de modelo o proveedor editando únicamente `config.yaml`, sin tocar el agente. La inspección real de paquetes se delega al servidor MCP de Wireshark, que envuelve `tshark` para leer tráfico en vivo o ficheros `.pcap`.
 
 ## Estructura del repositorio
 
@@ -67,7 +72,8 @@ agent/
 - Windows con `npm`/Node.js instalado.
 - Python 3 con `venv` disponible en el PATH.
 - [Wireshark](https://www.wireshark.org/) instalado (para `tshark`, usado por el servidor MCP).
-- Una API key de un proveedor compatible.
+- [LiteLLM](https://docs.litellm.ai) instalado (`pip install "litellm[proxy]"`) y en ejecución como proxy local.
+- Una API key de un proveedor compatible (p. ej. OpenRouter).
 
 ## Instalación
 
