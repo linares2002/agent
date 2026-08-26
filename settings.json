@@ -1,11 +1,13 @@
 {
   "packages": [
-    "npm:pi-mcp-adapter"
+    "npm:pi-mcp-adapter",
+    "npm:pi-provider-litellm"
   ],
-  "lastChangelogVersion": "0.83.0",
-  "defaultProvider": "openrouter",
-  "defaultModel": "google/gemini-2.5-flash",
+  "lastChangelogVersion": "0.84.2",
+  "defaultProvider": "litellm",
+  "defaultModel": "gemini-3.5-flash-lite",
   "defaultThinkingLevel": "low",
   "enableSkillCommands": true,
-  "theme": "dark"
+  "theme": "dark",
+  "hideThinkingBlock": true
 }

@@ -19,6 +19,19 @@ set "SKILLS_DST=%PI_AGENT_DIR%\skills"
 set "WIRESHARK_DIR=%SCRIPT_DIR%\wireshark-mcp"
 
 echo.
+echo [0/6] Verificando que el directorio global de npm este en PATH...
+for /f "delims=" %%i in ('npm bin -g 2^>nul') do set "NPM_BIN=%%i"
+if "%NPM_BIN%"=="" (
+    echo ERROR: no se pudo obtener el directorio global de npm.
+    exit /b 1
+)
+echo "%PATH%" | findstr /I /C:"%NPM_BIN%" >nul
+if errorlevel 1 (
+    echo AVISO: "%NPM_BIN%" no esta en PATH. Agregandolo para esta sesion...
+    set "PATH=%NPM_BIN%;%PATH%"
+)
+
+echo.
 echo [1/6] Instalando @earendil-works/pi-coding-agent (npm, --ignore-scripts)...
 call npm install -g --ignore-scripts @earendil-works/pi-coding-agent
 if errorlevel 1 (
@@ -27,12 +40,8 @@ if errorlevel 1 (
 )
 
 echo.
-echo [2/6] Instalando pi-mcp-adapter (declarado en settings.json, npm, --ignore-scripts)...
-call npm install -g --ignore-scripts pi-mcp-adapter
-if errorlevel 1 (
-    echo ERROR: fallo la instalacion de pi-mcp-adapter via npm.
-    exit /b 1
-)
+echo [2/6] Instalando pi-mcp-adapter, pi-provider-litellm: en la primera ejecución de pi
+
 
 echo.
 echo [3/6] Creando estructura en "%PI_AGENT_DIR%"...
