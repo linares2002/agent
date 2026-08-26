@@ -1,8 +1,5 @@
 # Manual de Instalación y Uso: LiteLLM + Pi Coding Agent
 
-> Guía para desarrolladores: configura LiteLLM como proxy local y conéctalo con Pi (pi.dev) para usar modelos como Gemini Flash vía OpenRouter.
-
----
 
 ## ¿Qué es cada componente?
 
@@ -31,14 +28,6 @@ La arquitectura es: **Pi → LiteLLM (localhost) → OpenRouter → Modelo (Gemi
 ```bash
 pip install "litellm[proxy]"
 ```
-
-### 2.2 Instalar el provider de Pi para LiteLLM (opcional)
-
-```bash
-pip install npm:pi-provider-litellm
-```
-
-> **Nota:** Este provider registra Pi como backend dentro del ecosistema LiteLLM. Verifica en https://pi.dev/docs si el nombre del paquete es el correcto para tu versión.
 
 ---
 
