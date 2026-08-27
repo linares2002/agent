@@ -63,7 +63,7 @@ agent/
 ├── settings.json               # Configuración base del agente (proveedor, modelo, etc.)
 ├── mcp.json                    # Definición del servidor MCP de Wireshark
 ├── auth.json                   # Credenciales del proveedor de IA
-├── litellm/                    # Proxy local que unifica múltiples proveedores de LLM bajo una API compatible con OpenAI
+├── litellm/                    # Proxy local que unifica proveedores de LLM bajo una API compatible con OpenAI
 └── skills/
     └── wireshark-analysis/     # Skill docente
 ```
