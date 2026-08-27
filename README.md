@@ -1,99 +1,98 @@
-# Tutor de IA para el análisis guiado de tráfico de red
+# AI Tutor for Guided Network Traffic Analysis
 
-Asistente de IA generativa (basado en [pi-coding-agent](https://pi.dev)) que actúa como tutor de apoyo en sesiones prácticas de **Redes basadas en IP** y **Sistemas de Telefonía**, capaz de inspeccionar y explicar tráfico de red real —en vivo o desde capturas `.pcap`— conectando siempre lo observado con el concepto teórico correspondiente (modelo OSI/TCP-IP, encapsulado, direccionamiento, control de flujo...).
+A generative AI assistant (based on [pi-coding-agent](https://pi.dev)) that acts as a support tutor in hands-on lab sessions for **IP-based Networks** and **Telephony Systems**, capable of inspecting and explaining real network traffic —live or from `.pcap` captures— always connecting what is observed to the corresponding theoretical concept (OSI/TCP-IP model, encapsulation, addressing, flow control, etc.).
 
-> Proyecto desarrollado en el marco de la **II Edición de Proyectos Innovadores con IA (Programa GenIA)** — Convocatoria 2026, Universidad de Jaén.
+> Project developed under the **2nd Edition of Innovative Projects with AI (GenIA Programme)** — 2026 Call, University of Jaén.
 
-## Contexto académico
+## Academic Context
 
-En las asignaturas *Redes basadas en IP* del Máster en Ingeniería de Telecomunicación y *Sistemas de Telfonía* del Grado en Ingeniería Telemática, una de las principales dificultades didácticas es la distancia entre la teoría por capas y la lectura de una captura de tráfico real, densa y poco intuitiva para el alumnado. Este proyecto incorpora a las prácticas un agente de IA con capacidades reales de análisis de red (vía MCP + Wireshark/tshark) guiado por una metodología pedagógica propia:
+In the courses *IP-based Networks* (Master's in Telecommunications Engineering) and *Telephony Systems* (Bachelor's in Telematic Engineering), one of the main pedagogical challenges is the gap between layered theory and reading a real traffic capture, which is dense and unintuitive for students. This project introduces an AI agent with real network analysis capabilities (via MCP + Wireshark/tshark) into lab sessions, guided by its own pedagogical methodology:
 
-- Parte siempre de un resumen general antes de entrar en el detalle de paquete.
-- Relaciona cada cabecera con su capa correspondiente.
-- Anima al alumnado a predecir qué va a observar antes de capturar.
-- Corrige errores conceptuales explicando el motivo, no solo el resultado.
-- Aplica límites éticos explícitos: solo captura en redes de laboratorio o con autorización expresa, y redacta automáticamente cualquier dato sensible que aparezca en claro.
+- Always starts with a general summary before diving into packet-level detail.
+- Links each header to its corresponding layer.
+- Encourages students to predict what they will observe before capturing.
+- Corrects conceptual errors by explaining the reason, not just the result.
+- Applies explicit ethical constraints: captures only on lab networks or with express authorisation, and automatically redacts any sensitive data appearing in plaintext.
 
-El agente es independiente del proveedor de IA (actualmente configurado sobre OpenRouter); el cambio a Gemini es una cuestión de configuración, no de rediseño.
+The agent is provider-agnostic (currently configured on OpenRouter); switching to Gemini is a matter of configuration, not redesign.
 
-## Arquitectura
+## Architecture
 
 ```mermaid
 flowchart LR
-    subgraph Alumno["Sesión práctica"]
-        A["👤 Alumnado"]
+    subgraph Student["Lab Session"]
+        A["👤 Students"]
     end
 
-    subgraph Agente["pi-coding-agent (tutor IA)"]
-        B["Agente + Skill\nwireshark-analysis"]
+    subgraph Agent["pi-coding-agent (AI tutor)"]
+        B["Agent + Skill\nwireshark-analysis"]
     end
 
-    subgraph Proxy["LiteLLM (proxy local)"]
-        L["localhost:4000\nAPI OpenAI-compatible"]
+    subgraph Proxy["LiteLLM (local proxy)"]
+        L["localhost:4000\nOpenAI-compatible API"]
     end
 
-    subgraph Proveedor["Proveedor de IA"]
+    subgraph Provider["AI Provider"]
         C["Gemini\n(configurable)"]
     end
 
-    subgraph MCP["Servidor MCP Wireshark"]
+    subgraph MCP["Wireshark MCP Server"]
         D["wireshark-mcp\n(Python venv)"]
         E["tshark"]
     end
 
-    F[("Tráfico en vivo /\ncapturas .pcap")]
+    F[("Live traffic /\n.pcap captures")]
 
-    A -- "pregunta / hipótesis" --> B
-    B -- "explicación pedagógica" --> A
-    B <-- "razonamiento" --> L
+    A -- "question / hypothesis" --> B
+    B -- "pedagogical explanation" --> A
+    B <-- "reasoning" --> L
     L <-- "OpenRouter API" --> C
-    B -- "petición de análisis" --> D
+    B -- "analysis request" --> D
     D --> E
-    E -- "inspecciona" --> F
-    D -- "paquetes / resumen\n(datos sensibles redactados)" --> B
+    E -- "inspects" --> F
+    D -- "packets / summary\n(sensitive data redacted)" --> B
 ```
 
-El agente conversa con el alumnado y, para razonar, delega las llamadas al modelo en **LiteLLM**, un proxy local (por defecto en `http://localhost:4000`) que expone una API compatible con OpenAI y reenvía las peticiones al proveedor configurado (OpenRouter → Gemini u otro). Esta capa de proxy permite cambiar de modelo o proveedor editando únicamente `config.yaml`, sin tocar el agente. La inspección real de paquetes se delega al servidor MCP de Wireshark, que envuelve `tshark` para leer tráfico en vivo o ficheros `.pcap`.
+The agent converses with students and, for reasoning, delegates model calls to **LiteLLM**, a local proxy (default at `http://localhost:4000`) that exposes an OpenAI-compatible API and forwards requests to the configured provider (OpenRouter → Gemini or other). This proxy layer allows switching model or provider by editing only `config.yaml`, without touching the agent. Actual packet inspection is delegated to the Wireshark MCP server, which wraps `tshark` to read live traffic or `.pcap` files.
 
-## Estructura del repositorio
+## Repository Structure
 
 ```
 agent/
-├── install-pi-agent.bat        # Instala pi-coding-agent y despliega toda la configuración
-├── settings.json               # Configuración base del agente (proveedor, modelo, etc.)
-├── mcp.json                    # Definición del servidor MCP de Wireshark
-├── auth.json                   # Credenciales del proveedor de IA
-├── litellm/                    # Proxy local que unifica proveedores de LLM bajo una API compatible con OpenAI
+├── install-pi-agent.bat        # Installs pi-coding-agent and deploys the full configuration
+├── settings.json               # Base agent configuration (provider, model, etc.)
+├── mcp.json                    # Wireshark MCP server definition
+├── auth.json                   # AI provider credentials
+├── litellm/                    # Local proxy that unifies LLM providers under an OpenAI-compatible API
 └── skills/
-    └── wireshark-analysis/     # Skill docente
+    └── wireshark-analysis/     # Teaching skill
 ```
 
-## Requisitos
+## Requirements
 
-- Windows con `npm`/Node.js instalado.
-- Python 3 con `venv` disponible en el PATH.
-- [Wireshark](https://www.wireshark.org/) instalado (para `tshark`, usado por el servidor MCP).
-- [LiteLLM](https://docs.litellm.ai) instalado (`pip install "litellm[proxy]"`) y en ejecución como proxy local.
-- Una API key de un proveedor compatible (p. ej. OpenRouter).
+- Windows with `npm`/Node.js installed.
+- Python 3 with `venv` available in the PATH.
+- [Wireshark](https://www.wireshark.org/) installed (for `tshark`, used by the MCP server).
+- [LiteLLM](https://docs.litellm.ai) installed (`pip install "litellm[proxy]"`) and running as a local proxy.
+- An API key from a compatible provider (e.g. OpenRouter).
 
-## Instalación
+## Installation
 
-Ejecuta `install-pi-agent.bat` desde esta carpeta. El script:
+Run `install-pi-agent.bat` from this folder. The script:
 
-1. Instala `@earendil-works/pi-coding-agent` y `pi-mcp-adapter` globalmente vía npm (`--ignore-scripts`).
-2. Crea `%USERPROFILE%\.pi\agent` y copia en él `settings.json`, `auth.json` y las `skills/`.
-3. Genera `mcp.json` con la ruta al entorno de Wireshark, adaptada al directorio de usuario actual.
-4. Despliega el servidor MCP de Wireshark: crea un entorno virtual de Python en `wireshark-mcp\.venv` e instala el paquete `wireshark-mcp`.
+1. Installs `@earendil-works/pi-coding-agent` and `pi-mcp-adapter` globally via npm (`--ignore-scripts`).
+2. Creates `%USERPROFILE%\.pi\agent` and copies `settings.json`, `auth.json`, and `skills/` into it.
+3. Generates `mcp.json` with the path to the Wireshark environment, adapted to the current user directory.
+4. Deploys the Wireshark MCP server: creates a Python virtual environment at `wireshark-mcp\.venv` and installs the `wireshark-mcp` package.
 
-## Configuración
+## Configuration
 
-`auth.json` se distribuye con la clave vacía (`"sk-"`) a propósito. Antes de ejecutar el agente, sustitúyela por tu clave del proveedor configurado en `settings.json`, directamente en `%USERPROFILE%\.pi\agent\auth.json` tras la instalación, o localmente en este archivo antes de instalar.
+`auth.json` is intentionally distributed with an empty key (`"sk-"`). Before running the agent, replace it with your key from the provider configured in `settings.json`, either directly in `%USERPROFILE%\.pi\agent\auth.json` after installation, or locally in this file before installing.
 
-## Skills incluidas
+## Included Skills
 
-- **wireshark-analysis** — Modo profesor: captura y analiza tráfico real (SIP, RIP, OSPF, ARP, DHCP, DNS, TCP, HTTP, TLS...) con fines exclusivamente didácticos.
+- **wireshark-analysis** — Teacher mode: captures and analyses real traffic (SIP, RIP, OSPF, ARP, DHCP, DNS, TCP, HTTP, TLS...) for exclusively educational purposes.
 
+## Contributors
 
-## Participantes
-
-Sebastián García Galán, Francisco Javier Maldonado Carrascosa, José Enrique Muñoz Expósito — Departamento de Ingeniería de Telecomunicación, Universidad de Jaén.
+Sebastián García Galán, Francisco Javier Maldonado Carrascosa, José Enrique Muñoz Expósito — Department of Telecommunications Engineering, University of Jaén.
