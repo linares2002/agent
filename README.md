@@ -60,11 +60,12 @@ El agente conversa con el alumnado y, para razonar, delega las llamadas al model
 ```
 agent/
 ├── install-pi-agent.bat        # Instala pi-coding-agent y despliega toda la configuración
-├── settings.json                # Configuración base del agente (proveedor, modelo, etc.)
-├── mcp.json                     # Definición del servidor MCP de Wireshark
-├── auth.json                    # Credenciales del proveedor de IA
+├── settings.json               # Configuración base del agente (proveedor, modelo, etc.)
+├── mcp.json                    # Definición del servidor MCP de Wireshark
+├── auth.json                   # Credenciales del proveedor de IA
+├── litellm                     # Proxy local que unifica múltiples proveedores de LLM bajo una API compatible con OpenAI
 └── skills/
-    └── wireshark-analysis/      # Skill docente
+    └── wireshark-analysis/     # Skill docente
 ```
 
 ## Requisitos
