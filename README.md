@@ -14,7 +14,12 @@ In the courses *IP-based Networks* (Master's in Telecommunications Engineering) 
 - Corrects conceptual errors by explaining the reason, not just the result.
 - Applies explicit ethical constraints: captures only on lab networks or with express authorisation, and automatically redacts any sensitive data appearing in plaintext.
 
-The agent is provider-agnostic (currently configured on OpenRouter); switching to Gemini is a matter of configuration, not redesign.
+The agent is provider-agnostic; LiteLLM supports two configuration modes to reach the AI model (see [Architecture](#architecture)):
+
+- **Via OpenRouter** — use an OpenRouter API key; OpenRouter routes the request to Gemini (or any other supported model).
+- **Via Gemini directly** — use a Google Gemini API key and point LiteLLM straight at the Gemini endpoint.
+
+Switching between modes is a matter of configuration (`config.yaml`), not redesign.
 
 ## Architecture
 
@@ -32,8 +37,14 @@ flowchart LR
         L["localhost:4000\nOpenAI-compatible API"]
     end
 
-    subgraph Provider["AI Provider"]
-        C["Gemini\n(configurable)"]
+    subgraph Routing["AI Provider (configurable)"]
+        direction TB
+        OR["OpenRouter\n(gateway)"]
+        GD["Gemini API\n(direct)"]
+    end
+
+    subgraph Model["AI Model"]
+        C["Gemini\n(or other)"]
     end
 
     subgraph MCP["Wireshark MCP Server"]
@@ -46,14 +57,22 @@ flowchart LR
     A -- "question / hypothesis" --> B
     B -- "pedagogical explanation" --> A
     B <-- "reasoning" --> L
-    L <-- "OpenRouter API" --> C
+    L -- "option A: OpenRouter API key" --> OR
+    L -- "option B: Gemini API key" --> GD
+    OR --> C
+    GD --> C
     B -- "analysis request" --> D
     D --> E
     E -- "inspects" --> F
     D -- "packets / summary\n(sensitive data redacted)" --> B
 ```
 
-The agent converses with students and, for reasoning, delegates model calls to **LiteLLM**, a local proxy (default at `http://localhost:4000`) that exposes an OpenAI-compatible API and forwards requests to the configured provider (OpenRouter → Gemini or other). This proxy layer allows switching model or provider by editing only `config.yaml`, without touching the agent. Actual packet inspection is delegated to the Wireshark MCP server, which wraps `tshark` to read live traffic or `.pcap` files.
+The agent converses with students and, for reasoning, delegates model calls to **LiteLLM**, a local proxy (default at `http://localhost:4000`) that exposes an OpenAI-compatible API. LiteLLM can forward requests to the AI model in two ways:
+
+- **Option A — via OpenRouter:** set an OpenRouter API key in `auth.json` and configure the OpenRouter endpoint in `config.yaml`. OpenRouter acts as a gateway and routes the call to Gemini (or any other model it supports).
+- **Option B — via Gemini directly:** set a Google Gemini API key in `auth.json` and point LiteLLM at the Gemini endpoint in `config.yaml`. No intermediate gateway is involved.
+
+In both cases, switching provider or model only requires editing `config.yaml`, without touching the agent. Actual packet inspection is delegated to the Wireshark MCP server, which wraps `tshark` to read live traffic or `.pcap` files.
 
 ## Repository Structure
 
@@ -64,6 +83,7 @@ agent/
 ├── mcp.json                    # Wireshark MCP server definition
 ├── auth.json                   # AI provider credentials
 ├── litellm/                    # Local proxy that unifies LLM providers under an OpenAI-compatible API
+│   └── config.yaml             # Provider selection: OpenRouter or Gemini direct
 └── skills/
     └── wireshark-analysis/     # Teaching skill
 ```
@@ -74,7 +94,7 @@ agent/
 - Python 3 with `venv` available in the PATH.
 - [Wireshark](https://www.wireshark.org/) installed (for `tshark`, used by the MCP server).
 - [LiteLLM](https://docs.litellm.ai) installed (`pip install "litellm[proxy]"`) and running as a local proxy.
-- An API key from a compatible provider (e.g. OpenRouter).
+- An API key from a compatible provider: **OpenRouter** or **Google Gemini** (see [Configuration](#configuration)).
 
 ## Installation
 
@@ -87,7 +107,30 @@ Run `install-pi-agent.bat` from this folder. The script:
 
 ## Configuration
 
-`auth.json` is intentionally distributed with an empty key (`"sk-"`). Before running the agent, replace it with your key from the provider configured in `settings.json`, either directly in `%USERPROFILE%\.pi\agent\auth.json` after installation, or locally in this file before installing.
+`auth.json` is intentionally distributed with an empty key (`"sk-"`). Before running the agent, replace it with your provider key and configure `litellm/config.yaml` according to the chosen option:
+
+**Option A — OpenRouter (routes to Gemini or other models):**
+
+```yaml
+model_list:
+  - model_name: default
+    litellm_params:
+      model: openrouter/google/gemini-2.0-flash-001
+      api_key: os.environ/OPENROUTER_API_KEY
+      api_base: https://openrouter.ai/api/v1
+```
+
+**Option B — Gemini direct:**
+
+```yaml
+model_list:
+  - model_name: default
+    litellm_params:
+      model: gemini/gemini-2.0-flash-001
+      api_key: os.environ/GEMINI_API_KEY
+```
+
+Set the corresponding key either directly in `%USERPROFILE%\.pi\agent\auth.json` after installation, or locally in this file before installing.
 
 ## Included Skills
 
